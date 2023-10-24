@@ -8,6 +8,7 @@
             text-color="#fff"
             :collapse="!$store.state.isCollapse"
         >
+        <!--  -->
 
             <el-menu-item :index="item.path" v-for="item in noChildren()" :key="item.path">
                 <component class="icons" :is="item.icon"></component>
