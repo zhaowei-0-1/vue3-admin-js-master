@@ -1,16 +1,13 @@
 
 <template>
-    <el-aside width="200px">
+    <el-aside :width="$store.state.isCollapse ? '180px' : '60px'">
         <!-- 折叠:collapse="true" -->
-        <el-menu 
-            class="el-menu-vertical-demo" 
-            background-color="#545c64" 
-            text-color="#fff"
-            :collapse="!$store.state.isCollapse"
-        >
-        <!--  -->
+        <el-menu class="el-menu-vertical-demo" background-color="#545c64" text-color="#fff"
+            :collapse="!$store.state.isCollapse" :collapse-transition="false">
+            <h3 v-show="$store.state.isCollapse">后台管理</h3>
+            <h3 v-show="!$store.state.isCollapse">后台</h3>
 
-            <el-menu-item :index="item.path" v-for="item in noChildren()" :key="item.path">
+            <el-menu-item :index="item.path" v-for="item in noChildren()" :key="item.path" @click="clickMenu(item)">
                 <component class="icons" :is="item.icon"></component>
                 <span>{{ item.label }}</span>
             </el-menu-item>
@@ -23,7 +20,8 @@
                 </template>
                 <!-- 二级菜单 -->
                 <el-menu-item-group>
-                    <el-menu-item :index="subItem.path" v-for="(subItem, subIndex) in item.children" :key="subIndex">
+                    <el-menu-item :index="subItem.path" v-for="(subItem, subIndex) in item.children" :key="subIndex"
+                        @click="clickMenu(subItem)">
                         <component class="icons" :is="subItem.icon"></component>
                         <span>{{ subItem.label }}</span>
                     </el-menu-item>
@@ -37,8 +35,10 @@
 </template>
 
 <script>
+import {useRouter} from 'vue-router'
 export default {
     setup() {
+        const router = useRouter();
         const list = [
             {
                 path: '/user',
@@ -79,9 +79,16 @@ export default {
             return list.filter((item) => item.children)
         };
 
+        const clickMenu = (item) => {
+            router.push({
+                name:item.name,
+            });
+        };
+
         return {
             noChildren,
             hasChildren,
+            clickMenu,
         }
     },
 };
@@ -95,5 +102,11 @@ export default {
 
 .el-menu {
     border-right: none;
+
+    h3 {
+        line-height: 48px;
+        color: #fff;
+        text-align: center;
+    }
 }
 </style>

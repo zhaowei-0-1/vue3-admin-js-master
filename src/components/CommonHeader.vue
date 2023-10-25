@@ -27,15 +27,24 @@
 </template>
 
 <script>
+// import { DefineComponent } from 'vue-demi';
+import {useStore} from 'vuex'
 export default {
     setup() {
+        let store =useStore()
         // const imgSrc = require('../assets/images/user.jpg')
         const getImagSrc = (user) => {
             return new URL(`../assets/images/${user}.jpg`, import.meta.url).href;
         };
+        let handleCollapse = () => {
+            // 调用vuex中的mutation
+            store.commit("updateIsCollapse")
+        }
         return {
             // imgSrc,
             getImagSrc,
+            handleCollapse,
+
         }
     }
 }
@@ -61,10 +70,12 @@ header {
 .l-content {
     display: flex;
     align-items: center;
-    .el-button{
+
+    .el-button {
         margin-right: 20px;
     }
-    h3{
+
+    h3 {
         color: #fff;
     }
 }
