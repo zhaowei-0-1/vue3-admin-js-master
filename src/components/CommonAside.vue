@@ -35,9 +35,12 @@
 </template>
 
 <script>
-import {useRouter} from 'vue-router'
+import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+import store from '../store';
 export default {
     setup() {
+        const store = useStore()
         const router = useRouter();
         const list = [
             {
@@ -81,9 +84,12 @@ export default {
 
         const clickMenu = (item) => {
             router.push({
-                name:item.name,
+                name: item.name,
             });
+            // vuex 跨组件通信
+            store.commit('selectMenu', item);
         };
+
 
         return {
             noChildren,

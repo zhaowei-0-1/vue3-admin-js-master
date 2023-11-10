@@ -12,5 +12,20 @@ export default {
             data: params,
             mock: true
         })
+    },
+
+    getCountData() {
+        return request({
+            url: '/home/getCountData',
+            method: 'get',
+            mock: true
+        })
+    },
+    getEchartData() {
+        return request({
+            url: '/home/getChartData',
+            method: 'get',
+            mock: true
+        })
     }
 }

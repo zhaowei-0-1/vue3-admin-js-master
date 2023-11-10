@@ -6,6 +6,10 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 
 - [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
+#运行
+cd my-vue
+pnpm dev / npm run dev
+
 #表格数据
 [
             {
@@ -55,5 +59,6 @@ This template should help get you started developing with Vue 3 in Vite. The tem
 -本地mock使用
 -线上fastmock的使用
 
+# echarts （cnpm install echarts -S）表格数据
 
 

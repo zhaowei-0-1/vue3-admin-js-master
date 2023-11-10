@@ -3,12 +3,13 @@ import router from '../router';
 <!-- 这里是首页页面入口 -->
 <template>
     <div class="common-layout">
-    <el-container >
+    <el-container class="lay-container">
     
       <common-aside />
       <el-container >
         <common-header/>
-        <el-main>
+        <common-tab />
+        <el-main >
             <router-view />
         </el-main>
       </el-container>
@@ -20,10 +21,12 @@ import router from '../router';
 import { defineComponent } from 'vue';
 import CommonHeader from '../components/CommonHeader.vue';
 import CommonAside from '../components/CommonAside.vue';
+import CommonTab from '../components/CommonTab.vue';
 export default defineComponent({
   commonets:{
     CommonHeader,
     CommonAside,
+    CommonTab,
   }
 });
 </script>
@@ -34,6 +37,10 @@ export default defineComponent({
   align-items: flex-start;
 }
 .common-layout{
+  .lay-container{
+    flex-wrap: nowrap;
+
+  }
   height: 100%;
   & > .el-container {
     height: 100%;

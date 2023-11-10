@@ -24,13 +24,37 @@
 
             </el-card>
         </el-col>
-        <el-col :span="16" style="margin-top: 20px"></el-col>
+        <el-col :span="16" style="margin-top: 5px">
+            <div class="num">
+                <el-card :body-style="{ display: 'flex', padding: 0 }" v-for="item in countData" :key="item.name">
+                    <component class="icons" :is="item.icon" :style="{ background: item.color }"></component>
+                    <div class="details">
+                        <p class="price">￥{{ item.value }}</p>
+                        <p class="txt">{{ item.name }}</p>
+                    </div>
+                </el-card>
+            </div>
+            <!-- 折线图 -->
+            <el-card style="height: 200px">
+                <div ref="echart" style="height: 200px"></div>
+            </el-card>
+            <div class="graph">
+                <el-card style="height: 200px">
+                    <div ref="userEchart" style="height: 180px"></div>
+                </el-card>
 
+                <el-card style="height: 200px">
+                    <div ref="videoEchart" style="height: 160px"></div>
+                </el-card>
+
+            </div>
+        </el-col>
     </el-row>
 </template>
 <script>
-import { defineComponent, getCurrentInstance, onMounted, ref } from 'vue';
+import { defineComponent, getCurrentInstance, onMounted, reactive, ref } from 'vue';
 import axios from 'axios';
+import * as echarts from 'echarts';
 export default defineComponent({
     setup() {
         // let tableData = [
@@ -79,6 +103,7 @@ export default defineComponent({
         // ];
         const { proxy } = getCurrentInstance();
         let tableData = ref([]);
+        let countData = ref([])
         const tableLabel = {
             name: '课程',
             todayBuy: '今日购买',
@@ -97,15 +122,158 @@ export default defineComponent({
             //         }
             //     });
             let res = await proxy.$api.getTableData();
-            console.log(res);
+            // console.log(res);
             tableData.value = res;
+        };
+        // 获取首页count数据
+        const getCountData = async () => {
+            let res = await proxy.$api.getCountData()
+            countData.value = res;
         }
+
         onMounted(() => {
             getTableList();
+            // 获取count 数据
+            getCountData();
+            // 获取echarts 表格数据
+            getEchartData();
         });
+
+        // echarts 表格的渲染
+        let xOptions = reactive({
+            // 图例文字颜色
+            textStyle: {
+                color: "#333",
+            },
+            grid: {
+                // left: "20%",
+                right:"0%"
+            },
+            // 提示框
+            tooltip: {
+                trigger: "axis",
+            },
+            xAxis: {
+                // 类目轴
+                type: "category",
+                data: [],
+                axisLine: {
+                    lineStyle: {
+                        color: "#17b3a3",
+                    },
+                },
+                axisLable: {
+                    interval: 0,
+                    color: "#333",
+                },
+            },
+
+            yAxis: [
+                {
+                    type: "value",
+                    axisLine: {
+                        lineStyle: {
+                            color: "#17b3a3"
+                        },
+                    },
+                },
+            ],
+            color: ["#2ec7c9", "#b6a2de", "#5ab1ef", "#ffb980", "#d87a80", "#8d98b3"],
+            series: [],
+        });
+        // 饼状图
+        let pieOptions = reactive({
+            tooltip: {
+                trigger: "item",
+            },
+            color: [
+                "#0f78f4",
+                "#dd536b",
+                "#9462e5",
+                "#a6a6a6",
+                "#e1bb22",
+                "#39c362",
+                "#3edecf",
+            ],
+            series: [],
+        })
+
+        let orderData = reactive({
+            xData: [],
+            series: [],
+        })
+
+        let userData = reactive({
+            xData: [],
+            series: [],
+        });
+
+        let videoData = reactive({
+            series: [],
+        });
+        // 获取数据
+        const getEchartData = async () => {
+            let result = await proxy.$api.getEchartData();
+            // console.log(result);
+            let res = result.orderData
+            let userRes = result.userData
+            let videoRes = result.videoData
+            orderData.xData = res.date
+            const keyArray = Object.keys(res.data[0])
+            const series = []
+            keyArray.forEach((key) => {
+                series.push({
+                    name: key,
+                    data: res.data.map(item => item[key]),
+                    type: "line",
+                });
+            });
+            orderData.series = series;
+            xOptions.xAxis.data = orderData.xData;
+            xOptions.series = orderData.series;
+            //userData 渲染数据
+            let hEcharts = echarts.init(proxy.$refs['echart']);
+            hEcharts.setOption(xOptions);
+
+            // 柱状图渲染数据
+            userData.xData = userRes.map((item) => item.date);
+            userData.series = [
+                {
+                    name: ['新增用户'],
+                    data: userRes.map(item => item.new),
+                    type: "bar"
+                },
+                {
+                    name: ['活跃用户'],
+                    data: userRes.map(item => item.active),
+                    type: "bar"
+                },
+            ];
+            // 折线图
+            xOptions.xAxis.data = userData.xData;
+            xOptions.series = userData.series;
+
+            // 柱状图
+            let uEcharts = echarts.init(proxy.$refs['userEchart']);
+            uEcharts.setOption(xOptions);
+
+            // 饼状图
+            videoData.series = [
+                {
+                    data: videoRes,
+                    type: "pie",
+
+                },
+            ];
+            pieOptions.series = videoData.series
+            let vEcharts = echarts.init(proxy.$refs['videoEchart']);
+            vEcharts.setOption(pieOptions);
+        };
+
         return {
             tableData,
             tableLabel,
+            countData,
 
         }
     },
@@ -138,6 +306,55 @@ export default defineComponent({
                 color: #666;
                 margin-left: 20px;
             }
+        }
+    }
+
+    .num {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .el-card {
+            width: 32%;
+            margin-bottom: 8px;
+        }
+
+        .icons {
+            width: 50px;
+            height: 50px;
+            font-size: 14px;
+            text-align: center;
+            line-height: 50px;
+            color: #fff;
+
+        }
+
+        .details {
+            margin-left: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .price {
+                font-size: 20px;
+                // margin-bottom: 2px;
+            }
+
+            .txt {
+                font-size: 13px;
+                text-align: center;
+                color: #999;
+            }
+        }
+    }
+
+    .graph {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8px;
+
+        .el-card {
+            width: 48%;
         }
     }
 }

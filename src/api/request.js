@@ -20,7 +20,7 @@ service.interceptors.request.use((req) => {
 
 // 请求之后统一处理
 service.interceptors.response.use((res) => {
-    console.log(res.data,'=====');
+    // console.log(res.data,'=====');
     const { code, data, msg } = res.data
     // 根据后端视情况而定
     if (code == 200) {

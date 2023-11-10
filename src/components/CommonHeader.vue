@@ -8,7 +8,12 @@
                     <Menu />
                 </el-icon>
             </el-button>
-            <h3>首页</h3>
+            <el-breadcrumb separator="/" class="breadcrumb">
+                <!--  -->
+                <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+                <el-breadcrumb-item :to="current.path" v-if="current">{{ current.lable }}</el-breadcrumb-item>
+
+            </el-breadcrumb>
         </div>
         <div class="r-content">
             <el-dropdown>
@@ -28,10 +33,11 @@
 
 <script>
 // import { DefineComponent } from 'vue-demi';
-import {useStore} from 'vuex'
+import { computed, defineComponent } from 'vue';
+import { useStore } from 'vuex'
 export default {
     setup() {
-        let store =useStore()
+        let store = useStore()
         // const imgSrc = require('../assets/images/user.jpg')
         const getImagSrc = (user) => {
             return new URL(`../assets/images/${user}.jpg`, import.meta.url).href;
@@ -40,10 +46,15 @@ export default {
             // 调用vuex中的mutation
             store.commit("updateIsCollapse")
         }
+        // 计算属性 取到currentMenu
+        const current = computed(() => {
+            return store.state.currentMenu;
+        })
         return {
             // imgSrc,
             getImagSrc,
             handleCollapse,
+            current,
 
         }
     }
@@ -78,5 +89,10 @@ header {
     h3 {
         color: #fff;
     }
+}
+
+.breadcrumb /deep/span {
+    color: #fff !important;
+    cursor: pointer !important;
 }
 </style>
