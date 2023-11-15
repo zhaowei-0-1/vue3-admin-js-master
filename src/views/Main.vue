@@ -2,15 +2,16 @@
 import router from '../router';
 <!-- 这里是首页页面入口 -->
 <template>
-    <div class="common-layout">
+  <div class="common-layout">
     <el-container class="lay-container">
-    
+      <!-- 左侧布局 -->
       <common-aside />
-      <el-container >
-        <common-header/>
+      <!-- 右侧布局 -->
+      <el-container>
+        <common-header />
         <common-tab />
-        <el-main >
-            <router-view />
+        <el-main class="right-main">
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -23,7 +24,7 @@ import CommonHeader from '../components/CommonHeader.vue';
 import CommonAside from '../components/CommonAside.vue';
 import CommonTab from '../components/CommonTab.vue';
 export default defineComponent({
-  commonets:{
+  commonets: {
     CommonHeader,
     CommonAside,
     CommonTab,
@@ -32,19 +33,28 @@ export default defineComponent({
 </script>
 
 <style lang="less" scoped>
-.el-container{
+.el-container {
   flex-wrap: wrap;
   align-items: flex-start;
+  height: 100%;
 }
-.common-layout{
-  .lay-container{
+
+.common-layout {
+  .lay-container {
     flex-wrap: nowrap;
 
+    .right-main {
+      height: calc(100% -124px) !important;
+    }
+
   }
+
   height: 100%;
-  & > .el-container {
+
+  &>.el-container {
     height: 100%;
-    & >.el-aside {
+
+    &>.el-aside {
       height: 100%;
       background: #545c64;
     }

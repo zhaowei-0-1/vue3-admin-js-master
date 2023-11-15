@@ -1,37 +1,62 @@
 
 <template>
     <div class="tags">
-        <el-tag 
-            :key="tag.name" 
-            v-for="(tag, index) in tags" 
-            :closable="tag.name !== 'home'" 
-            :disable-transitions="false"
-            :effect="$route.name === tag.name ? 'dark' : 'plain'"
-        >{{tag.lable}}</el-tag>
+        <el-tag :key="tag.name" v-for="(tag, index) in tags" :closable="tag.name !== 'home'" :disable-transitions="false"
+            :effect="$route.name === tag.name ? 'dark' : 'plain'" @click="changeMenu(tag)" @close="handleClose(tag, index)">
+            {{ tag.lable }}
+        </el-tag>
     </div>
 </template>
 
 <script>
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import store from '../store';
+
 export default {
     setup() {
         const store = useStore();
+        const router = useRouter();
+        const route = useRoute();
         const tags = store.state.tabsList;
+        const changeMenu = (item) => {
+            router.push({ name: item.name });
+        };
+        const handleClose = (tag, index) => {
+            let length = tag.length - 1;
+            // 处理vuex中的tabsList
+            store.commit("closeTab", tag);
+            // 
+            if (tag.name !== route.name) {
+                return;
+            }
+            if (index === length) {
+                router.push({
+                    name: tags[index - 1].name,
+                });
+            } else {
+                // tag删除 页面路径不变的处理
+                router.push({
+                    name: tags[index].name,
+                })
+            }
+        }
+
 
         return {
             tags,
+            changeMenu,
+            handleClose,
         }
     },
 };
 </script>
 
 <style lang="less" scoped>
-.tags{
+.tags {
     padding-top: 10px;
     padding-left: 10px;
-    .el-tag{
+    // padding: 20px;
+    .el-tag {
         margin-right: 15px;
         cursor: pointer;
     }

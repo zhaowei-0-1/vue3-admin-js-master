@@ -1,5 +1,11 @@
 import Mock from 'mockjs'
 import homeApi from './mockData/home'
+import userApi from './mockData/user'
 
 // 拦截请求
-Mock.mock('/home/getData',homeApi.getHomeData)
+Mock.mock('/home/getData', homeApi.getHomeData)
+
+// 本地获取列表user的数据
+Mock.mock(/user\/getUser/, 'get', userApi.getUserList)
+// addUser
+Mock.mock(/user\/add/, 'post', userApi.createUser)

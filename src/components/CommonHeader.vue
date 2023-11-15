@@ -91,7 +91,11 @@ header {
     }
 }
 
-.breadcrumb /deep/span {
+// .breadcrumb /deep/span {
+//     color: #fff !important;
+//     cursor: pointer !important;
+// }
+:deep(.breadcrumb span) {
     color: #fff !important;
     cursor: pointer !important;
 }
