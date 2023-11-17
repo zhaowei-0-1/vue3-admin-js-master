@@ -50,4 +50,23 @@ export default {
             // data:{ total: 0,page: 1,}
         })
     },
+
+    // 编辑用户
+    editUser(params) {
+        return request({
+            url: '/user/edit',
+            method: 'post',
+            mock: false,
+            data: params
+        })
+    },
+    // 删除用户
+    deleteUser(params) {
+        return request({
+            url: '/user/delete',
+            method: 'get',
+            mock: false,
+            data: params
+        })
+    },
 }

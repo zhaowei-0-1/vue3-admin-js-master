@@ -9,3 +9,5 @@ Mock.mock('/home/getData', homeApi.getHomeData)
 Mock.mock(/user\/getUser/, 'get', userApi.getUserList)
 // addUser
 Mock.mock(/user\/add/, 'post', userApi.createUser)
+Mock.mock(/user\/edit/, 'post', userApi.updateUser)
+Mock.mock(/user\/delete/, 'get', userApi.deleteUser)

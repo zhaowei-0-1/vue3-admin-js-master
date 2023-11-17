@@ -1,6 +1,6 @@
 <template>
     <div class="user-header">
-        <el-button type="primary" @click="dialogVisible = true">+新增</el-button>
+        <el-button type="primary" @click="handleAdd()">+新增</el-button>
         <el-form :inline="true" :model="formInline">
             <el-form-item lable="请输入">
                 <el-input v-model="formInline.keyword" placeholder="请输入用户名" />
@@ -18,9 +18,9 @@
                 :width="item.width ? item.width : 125" />
 
             <el-table-column fixed="right" label="操作" min-width="120">
-                <template #default>
-                    <el-button type="primary" size="small">编辑</el-button>
-                    <el-button link type="danger" size="small">删除</el-button>
+                <template #default="scope">
+                    <el-button type="primary" size="small" @click="handleEdit(scope.row)">编辑</el-button>
+                    <el-button link type="danger" size="small" @click="handleDelete(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -28,11 +28,11 @@
         <el-pagination small background layout="prev, pager, next" :total="config.total" class="pager mt-4"
             @current-change="changePage" />
     </div>
-    <el-dialog v-model="dialogVisible" title="新增用户" width="55%" :before-close="handleClose">
-        <el-form :inline="true" :model="formUser" ref="userForm"  :rules="rules">
+    <el-dialog v-model="dialogVisible" :title="action === 'add' ? '新增用户' : '编辑用户'" width="55%" :before-close="handleClose">
+        <el-form :inline="true" :model="formUser" ref="userForm" :rules="rules">
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="姓名" prop="name">
+                    <el-form-item label="姓名" prop="name" :rules="[{ required: true, message: '请输入用户名' }]">
                         <el-input v-model="formUser.name" placeholder="请输入姓名" clearable />
                     </el-form-item>
                 </el-col>
@@ -68,7 +68,7 @@
         </el-form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button @click="handleCancel">取消</el-button>
                 <el-button type="primary" @click="onSubmit">
                     确定
                 </el-button>
@@ -148,12 +148,14 @@ export default defineComponent({
         const handleClose = (done) => {
             ElMessageBox.confirm('确定关闭吗？')
                 .then(() => {
+                    proxy.$refs.userForm.resetFields();
                     done()
                 })
                 .catch(() => {
                     // catch error
                 });
         };
+
         // 添加用户的form数据
         const formUser = reactive({
             name: "",//添加用户的 用户名
@@ -162,6 +164,8 @@ export default defineComponent({
             birth: "",
             addr: " ",
         });
+        // 校验规则
+
         // 日期处理
         const timeFormat = (Time) => {
             var time = new Date(time);
@@ -176,17 +180,87 @@ export default defineComponent({
         }
         //提交（确认按钮）
         const onSubmit = async () => {
-            formUser.birth = timeFormat(formUser.birth);
-            let res = await proxy.$api.addUser(formUser);
-            // console.log(res);
-            // 表单重置
-            if (res) {
-                dialogVisible.value = false;
-                proxy.$refs.userForm.resetFields();
-                getUserData(config);
-            }
+            // 校验
+            proxy.$refs.userForm.validate(async (valid) => {
+                if (valid) {
+                    //新增接口
+                    if (action.value === 'add') {
+                        formUser.birth = timeFormat(formUser.birth);
+                        let res = await proxy.$api.addUser(formUser);
+                        // console.log(res);
+                        // 表单重置
+                        if (res) {
+                            dialogVisible.value = false;
+                            proxy.$refs.userForm.resetFields();
+                            getUserData(config);
+                        }
+                    } else {
+                        // 编辑接口
+                        // console.log(formUser, "user")
+                        formUser.gender === '男' ? (formUser.gender = 1) : (formUser.gender = 0);
+                        let res = await proxy.$api.editUser(formUser);
+                        // console.log(res);
+                        // 表单重置
+                        if (res) {
+                            dialogVisible.value = false;
+                            proxy.$refs.userForm.resetFields();
+                            getUserData(config);
+                        }
+                    }
+
+                } else {
+                    // 校验提示错误
+                    ElMessage({
+                        showClose: true,
+                        message: '请输入正确内容',
+                        type: 'error'
+                    });
+                }
+            });
 
         };
+        // 取消按钮
+        const handleCancel = () => {
+            dialogVisible.value = false;
+            proxy.$refs.userForm.resetFields();
+        }
+
+        // 区分编辑和新增
+        const action = ref('add');
+
+        // 编辑
+        const handleEdit = (row) => {
+            // console.log(row,"row");
+            action.value = 'edit';
+            dialogVisible.value = true;
+            // 浅拷贝写在回调函数中
+            proxy.$nextTick(() => {
+                Object.assign(formUser, row);
+            });
+            // Object.assign(formUser,row);
+        };
+        // 新增用户
+        const handleAdd = () => {
+            action.value = 'add';
+            dialogVisible.value = true;
+        };
+
+        // 删除用户
+        const handleDelete = (row) => {
+            ElMessageBox.confirm('确定删除吗？')
+                .then(async () => {
+                    await proxy.$api.deleteUser({ id: row.id });
+                    ElMessage({
+                        showClose: true,
+                        message: '删除成功',
+                        type: "success",
+                    });
+                    getUserData(config)
+                })
+                .catch(() => {
+                    // catch error
+                });
+        }
         return {
             list,
             tableLable,
@@ -198,10 +272,14 @@ export default defineComponent({
             handleClose,
             formUser,
             onSubmit,
-
+            handleCancel,
+            action,
+            handleEdit,
+            handleAdd,
+            handleDelete,
         }
     },
-});
+})
 </script>
 
 <style lang="less" scoped>
