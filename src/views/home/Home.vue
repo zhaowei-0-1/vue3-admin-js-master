@@ -147,7 +147,7 @@ export default defineComponent({
             },
             grid: {
                 // left: "20%",
-                right:"0%"
+                right: "0%"
             },
             // 提示框
             tooltip: {
@@ -239,12 +239,12 @@ export default defineComponent({
             userData.xData = userRes.map((item) => item.date);
             userData.series = [
                 {
-                    name: ['新增用户'],
+                    name: '新增用户',
                     data: userRes.map(item => item.new),
                     type: "bar"
                 },
                 {
-                    name: ['活跃用户'],
+                    name: '活跃用户',
                     data: userRes.map(item => item.active),
                     type: "bar"
                 },

@@ -13,5 +13,6 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 }
 // 全局挂在api
 app.config.globalProperties.$api = api
+store.commit("addMenu", router)
 app.use(router).use(store)
 app.mount('#app')

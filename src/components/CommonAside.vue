@@ -73,14 +73,16 @@ export default {
                 ]
             }
         ];
+        const asyncList = store.state.menu;
         // 定义方法：判断是否有二级菜单
         const noChildren = () => {
-            return list.filter((item) => !item.children);
+            return asyncList.filter((item) => !item.children);
         };
 
         const hasChildren = () => {
-            return list.filter((item) => item.children)
+            return asyncList.filter((item) => item.children)
         };
+
 
         const clickMenu = (item) => {
             router.push({

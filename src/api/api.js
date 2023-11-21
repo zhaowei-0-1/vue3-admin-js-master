@@ -69,4 +69,15 @@ export default {
             data: params
         })
     },
+    // 根据用户的用户名不同返回不同菜单列表
+    getMenu(params) {
+        return request({
+            url: '/permission/getMenu',
+            method: 'post',
+            mock: false,
+            data: params
+        })
+    },
+
+
 }
