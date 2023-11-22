@@ -1,13 +1,14 @@
 <h1 align="center"> Vue3后台管理系统 </h1>
+
 ## 项目介绍
 
 本项目使用Vue 3 + Vite 搭建后台管理系统，基于vue3+Element-plus实现。本项目旨在对所学进行使用，如：mook、echarts、less等的使用；会涉及后台管理常见功能，项目还在持续中，后面会进行优化、完善。
 ***
 ## 项目核心
 ```
-    技术栈 ：  vuex、vue-router、axios、element-plus、echarts
-   项目搭建 ： 项目模块搭建、脚手架搭建配置、组件初始化、路由初始化
-   模块分配 ：登录页、后台首页、用户管理页、分页处理、路由守卫、权限管理
+技术栈 ：  vuex、vue-router、axios、element-plus、echarts。
+项目搭建 ： 项目模块搭建、脚手架搭建配置、组件初始化、路由初始化。
+模块分配 ：登录页、后台首页、用户管理页、分页处理、路由守卫、权限管理。
     
 ```
 ***
@@ -32,9 +33,9 @@
 - npm run dev
 
 #### 实现效果
-！[登录页]  (login.png)
-！[首页]  (home.png)
-！[用户管理]  (user.png)
+！[登录页](login.png)
+！[首页](home.png)
+！[用户管理](user.png)
 
 
 
