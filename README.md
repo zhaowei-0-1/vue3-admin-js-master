@@ -33,11 +33,11 @@
 - npm run dev
 
 #### 实现效果
-![登录页](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/login.png);
+![登录页](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/login.png)
 
-![首页](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/home.png);
+![首页](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/home.png)
 
-![用户管理](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/userManage.png);
+![用户管理](https://github.com/zhaowei-0-1/vue3-admin-js-master/blob/d6d23dd9a0500692c90183472946afe245c32746/src/assets/images/demo/userManage.png)
 
 
 
