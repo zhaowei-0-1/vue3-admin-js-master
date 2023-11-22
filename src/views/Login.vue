@@ -31,6 +31,7 @@ export default {
             // console.log(res, 'loginForm')
             store.commit("setMenu", res.menu);
             store.commit("addMenu", router);
+            store.commit("setToken", res.token);
             // 路由跳转
             router.push({
                 name: 'home',

@@ -1,5 +1,7 @@
 // vuex 侧边栏折叠展开
 import { createStore } from 'vuex';
+import Cookie from 'js-cookie';
+
 import router from '../router';
 export default createStore({
     state: {
@@ -13,12 +15,14 @@ export default createStore({
                 icon: 'home'
             }
         ],
-        menu: []
+        menu: [],
+        token: '',
     },
     mutations: {
         updateIsCollapse(state, payload) {
             state.isCollapse = !state.isCollapse
         },
+        // 面包屑实现
         selectMenu(state, val) {
             // 判断
             // val.name == 'home' ? (state.currentMenu = null) : (state.currentMenu = val)
@@ -26,8 +30,8 @@ export default createStore({
                 state.currentMenu = null
             } else {
                 state.currentMenu = val
-                let result = state.tabsList.findIndex(item => item.name === val.name)
-                result == -1 ? state.tabsList.push(val) : ''
+                let result = state.tabsList.findIndex(item => item.name === val.name);
+                result === -1 ? state.tabsList.push(val) : ''
             }
         },
         closeTab(state, val) {
@@ -68,7 +72,25 @@ export default createStore({
             menuArray.forEach(item => {
                 router.addRoute('home1', item)
             })
-        }
+        },
 
+        // 退出 清除数据
+        cleanMenu(state) {
+            state.menu = []
+            localStorage.removeItem('menu')
+        },
+
+        // 路由守卫
+        setToken(state, val) {
+            state.token = val
+            Cookie.set('token', val)
+        },
+        clearToken(state) {
+            state.token = ''
+            Cookie.remove('token')
+        },
+        getToken(state) {
+            state.token = state.token || Cookie.get('token')
+        }
     }
 })

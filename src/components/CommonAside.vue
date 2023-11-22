@@ -42,6 +42,7 @@ export default {
     setup() {
         const store = useStore()
         const router = useRouter();
+        // 数组对象结构
         const list = [
             {
                 path: '/user',

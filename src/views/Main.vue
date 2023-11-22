@@ -40,11 +40,14 @@ export default defineComponent({
 }
 
 .common-layout {
+
   .lay-container {
     flex-wrap: nowrap;
 
     .right-main {
-      height: calc(100% -124px) !important;
+      height: 100%;
+      height: calc(100% -120px) !important;
+
     }
 
   }

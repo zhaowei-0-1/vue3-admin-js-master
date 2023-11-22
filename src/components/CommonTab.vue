@@ -56,6 +56,7 @@ export default {
     padding-top: 10px;
     padding-left: 10px;
     // padding: 20px;
+    width: 100%;
     .el-tag {
         margin-right: 15px;
         cursor: pointer;

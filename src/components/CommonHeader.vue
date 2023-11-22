@@ -9,7 +9,7 @@
                 </el-icon>
             </el-button>
             <el-breadcrumb separator="/" class="breadcrumb">
-                <!--  -->
+                <!-- 点击左侧commonAside 显示commonHeader -->
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="current.path" v-if="current">{{ current.lable }}</el-breadcrumb-item>
 
@@ -23,7 +23,7 @@
                 <template #dropdown>
                     <el-dropdown-menu>
                         <el-dropdown-item>个人中心</el-dropdown-item>
-                        <el-dropdown-item>退出</el-dropdown-item>
+                        <el-dropdown-item @click="handleLoginOut">退出</el-dropdown-item>
                     </el-dropdown-menu>
                 </template>
             </el-dropdown>
@@ -34,7 +34,8 @@
 <script>
 // import { DefineComponent } from 'vue-demi';
 import { computed, defineComponent } from 'vue';
-import { useStore } from 'vuex'
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 export default {
     setup() {
         let store = useStore()
@@ -49,12 +50,23 @@ export default {
         // 计算属性 取到currentMenu
         const current = computed(() => {
             return store.state.currentMenu;
+           
         })
+        const router = useRouter();
+        // 退出 需要清除菜单 在store index.js 
+        const handleLoginOut = () => {
+            store.commit('cleanMenu');
+            router.push({
+                name: 'login',
+            });
+
+        }
         return {
             // imgSrc,
             getImagSrc,
             handleCollapse,
             current,
+            handleLoginOut,
 
         }
     }
