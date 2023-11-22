@@ -1,12 +1,12 @@
 
-<template>
+<!-- <template>
     <div class="tags">
         <el-tag :key="tag.name" v-for="(tag, index) in tags" :closable="tag.name !== 'home'" :disable-transitions="false"
             :effect="$route.name === tag.name ? 'dark' : 'plain'" @click="changeMenu(tag)" @close="handleClose(tag, index)">
             {{ tag.lable }}
         </el-tag>
     </div>
-</template>
+</template> -->
 
 <script>
 import { useRouter, useRoute } from 'vue-router'
