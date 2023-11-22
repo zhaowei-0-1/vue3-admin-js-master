@@ -33,9 +33,9 @@
 - npm run dev
 
 #### 实现效果
-！[登录页](login.png)
-！[首页](home.png)
-！[用户管理](user.png)
+！[登录页](src/assets/images/demo/login.png)
+！[首页](src/assets/images/demo/home.png)
+！[用户管理](src/assets/images/demo/userManage.png)
 
 
 
